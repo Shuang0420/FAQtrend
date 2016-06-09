@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Highcharts with mySQL and PHP - Ajax101.com</title>
+<title>FAQ Trend</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -104,7 +104,7 @@
   </div>
 
   <?php
-        if (isset($_GET['adjusted']) || isset($_GET['two_series'])) {
+        if (isset($_GET['Details'])) {
             echo "<script type='text/javascript'>document.getElementById('div_hot').style.display='none';</script>";
             $question = isset($_GET['type']) ? $_GET['type'] : '';
             setcookie('mycookie', $question);
@@ -129,14 +129,10 @@
             }
 
             echo '</table>';
-            //echo '</center>';
             echo '</div>';
 
             echo '<div style="position:absolute;height:200px;top:450px;left:700px">';
-            //echo '<center>
             echo '<table style="border=1">';
-            //echo '<caption>原始问题范例</caption>';
-            //可以选择改成与左边table行数相同，即行数＝date
             echo '<tr><th>原始问题范例(前75条)</th></tr>';
             $conn = new mysqli('localhost', 'root', '', 'FAQsys');
             $conn->query('SET NAMES utf8');
@@ -145,32 +141,28 @@
             if ($result->num_rows > 0) {
                 // 输出每行数据
                 while ($row = mysqli_fetch_array($result)) {
-                    //echo "<option value=".$data['question'].$question == 'option1' ? ' selected' : ''.'>'.$data['question']."</option>\n";
-                  if (strpos($row['originalQuestion'], '##') !== false) {
-                      $originalQuestion = explode('##', $row['originalQuestion']);
-                      foreach ($originalQuestion as $value) {
-                          if ($count < 75) {
-                              echo'<tr><td>'.$value.'</td><tr>';
-                              ++$count;
-                          }
-                      }
-                  } else {
-                      if ($count < 75) {
-                          echo'<tr><td width="500px">'.$row['originalQuestion'].'</td><tr>';
-                          ++$count;
-                      }
-                  }
+                    if (strpos($row['originalQuestion'], '##') !== false) {
+                        $originalQuestion = explode('##', $row['originalQuestion']);
+                        foreach ($originalQuestion as $value) {
+                            if ($count < 75) {
+                                echo'<tr><td>'.$value.'</td><tr>';
+                                ++$count;
+                            }
+                        }
+                    } else {
+                        if ($count < 75) {
+                            echo'<tr><td width="500px">'.$row['originalQuestion'].'</td><tr>';
+                            ++$count;
+                        }
+                    }
                 }
             }
 
             echo '</table>';
-            //echo '</center>';
             echo '</div>';
 
-            if (isset($_GET['adjusted'])) {
-                echo '<script type="text/javascript" src="data2.js" charset="utf-8" ></script>';
-            } else {
-                echo '<script type="text/javascript" src="data.js" charset="utf-8" ></script>';
+            if (isset($_GET['Details'])) {
+                echo '<script src="/data.js" type="text/javascript"></script>';
             }
         }
 
@@ -188,16 +180,14 @@
     if ($result->num_rows > 0) {
         // 输出每行数据
         while ($data = mysqli_fetch_array($result)) {
-            //echo "<option value=".$data['question'].$question == 'option1' ? ' selected' : ''.'>'.$data['question']."</option>\n";
-          echo '<option value='.$data['question'].'>'.$data['question']."</option>\n";
+            echo '<option value='.$data['question'].'>'.$data['question']."</option>\n";
         }
     }
     mysqli_close($conn);
 
     echo "</select>\n";
   ?>
-  <input type="submit" value="adjusted" name="adjusted"/>
-  <input type="submit" value="two_series" name="two_series"/>
+  <input type="submit" value="Details" name="Details"/>
   </form>
 
 <div id="chart" style="height: 400px; margin: 0 auto"></div>

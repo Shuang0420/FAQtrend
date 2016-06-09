@@ -1,42 +1,30 @@
 <?php
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "FAQsys";
-
+  $servername = 'localhost';
+  $username = 'root';
+  $password = '';
+  $dbname = 'FAQsys';
 
   // 创建连接
   $conn = new mysqli($servername, $username, $password, $dbname);
-  //$conn->query("SET NAMES utf8");
+  $conn->query('SET NAMES utf8');
 
   // 检测连接
   if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
+      die('Connection failed: '.$conn->connect_error);
   }
+  //$question_multipleLines = $_COOKIE['mycookie2'];
+    $question1 = $_COOKIE['mycookie'] ? $_COOKIE['mycookie'] : '';
+    echo $question1.'=';
+    $sql1 = "SELECT date,dayCount,Count FROM `FAQsys`.`FQtable` WHERE question LIKE '".$question1."'";
+    $result1 = $conn->query($sql1);
 
-  $question = $_COOKIE['mycookie'] ? $_COOKIE['mycookie'] : '';
-  echo $question."=";
-    if ($question == '大盘') {
-      $sql = "SELECT date,SUM(count) adjustedCount FROM `FAQsys`.`FQtable` GROUP BY date";
-    } else {
-      $sql = "SELECT date,adjustedCount FROM `FAQsys`.`FQtable` WHERE question LIKE '".$question."'";
-    }
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
+    if ($result1->num_rows > 0) {
         // 输出每行数据
-        while($row = mysqli_fetch_array($result)) {
-            echo $row['date'] . "/" . $row['adjustedCount']. "/" ;
+        while ($row = mysqli_fetch_array($result1)) {
+            echo $row['date'].'/'.$row['dayCount'].'/'. 10 * $row['Count'].'/';
         }
-
     } else {
-        echo "0 results";
+        echo '0 results';
     }
 
     mysqli_close($conn);
-
-
-
-
-
-?>

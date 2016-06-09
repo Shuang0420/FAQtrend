@@ -1,22 +1,27 @@
 $(function() {
+    //Highcharts with mySQL and PHP - Ajax101.com
+
     var date = [];
     var adjustedCount = [];
     var dayCount = [];
-    var switch1 = true;
+    var switch2 = 0;
     $.get('values.php', function(data) {
-        data = data.split('/');
+        tmp = data.split('=');
+        question = tmp[0];
+        data = tmp[1].split('/');
         for (var i in data) {
-            if (switch1 == true) {
+            if (switch2 == 0) {
                 date.push(data[i]);
-                switch1 = false;
+                switch2 = 1;
+            } else if (switch2 == 1) {
+                dayCount.push(parseInt(data[i]));
+                switch2 = 2;
             } else {
-                adjustedCount.push(parseFloat(data[i]));
-                switch1 = true;
+                adjustedCount.push(parseInt(data[i]));
+                switch2 = 0;
             }
-
         }
         date.pop();
-
 
 
         $('#chart').highcharts({
@@ -60,8 +65,11 @@ $(function() {
                 }
             },
             series: [{
-                name: 'Count',
+                name: 'questionCount--放大10倍',
                 data: adjustedCount
+            }, {
+                name: 'dayCount',
+                data: dayCount
             }]
         });
     });
