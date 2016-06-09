@@ -104,7 +104,7 @@
   </div>
 
   <?php
-        if (isset($_GET['Details'])) {
+        if (isset($_GET['Enter'])) {
             echo "<script type='text/javascript'>document.getElementById('div_hot').style.display='none';</script>";
             $question = isset($_GET['type']) ? $_GET['type'] : '';
             setcookie('mycookie', $question);
@@ -161,7 +161,7 @@
             echo '</table>';
             echo '</div>';
 
-            if (isset($_GET['Details'])) {
+            if (isset($_GET['Enter'])) {
                 echo '<script src="/data.js" type="text/javascript"></script>';
             }
         }
@@ -187,7 +187,7 @@
 
     echo "</select>\n";
   ?>
-  <input type="submit" value="Details" name="Details"/>
+  <input type="submit" value="Enter" name="Enter"/>
   </form>
 
 <div id="chart" style="height: 400px; margin: 0 auto"></div>
